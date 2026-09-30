@@ -82,7 +82,8 @@ masqueraded_as: "clean resume"
 Stdlib-only Python, no dependencies:
 
 ```bash
-python python/silent_timeout_probe.py   # runs the self-test suite (6/6)
+python python/silent_timeout_probe.py                                  # self-test (8/8)
+python tck/conformance_runner.py probes/silent-family-candidates.jsonl # conformance check
 ```
 
 ```python
@@ -94,6 +95,29 @@ verdict, evidence = probe(
 )
 # ('SILENT_TIMEOUT', None) — silence, surfaced as a first-class failure
 ```
+
+## Specification & conformance
+
+- **[SPEC v0.1](spec/SPEC.md)** — the normative spec: terms, three-state verdict contract, five-bucket First Signal predicates, fail-closed absolute rules, versioning & governance.
+- **[signal.schema.json](schema/signal.schema.json)** — machine-readable schema for the `signal.*` protocol extension.
+- **[TCK](tck/conformance_runner.py)** — the conformance test kit. Run it over your JSONL records:
+
+| Level | Means |
+|---|---|
+| **L0** | Three-state verdict contract on identity + expected fields |
+| **L1** | Complete `signal.*` objects (first_signal / window / window_status / masquerade_face / verdict_rule) |
+| **L2** | Fail-closed absolute rules present, machine-checkable verdict rules |
+
+The bundled candidate probes conform at **L2 (6/6 records)**. An adopter MAY advertise: *"silent-timeout-protocol L2 conformant (TCK v0.1, N/N records)"*.
+
+## Adopters
+
+*Status: candidate adopters — this list is honest, not aspirational.*
+
+- [AgentEtna/how-agents-fail](https://huggingface.co/datasets/AgentEtna/how-agents-fail) — silent-family candidate rows under line-by-line adjudication (fold proposed per the agreed async process in #9006)
+- [shimjaemandu/reality-layer](https://github.com/shimjaemandu/reality-layer) — independent external runtime checkpoint built against the three-state framing from the same thread
+
+Own an agent harness? Run the TCK and open a PR to list your conformance level here.
 
 ## Candidate probe rows
 
@@ -111,7 +135,7 @@ These are **protocol-layer candidates**. Thresholds are calibration points, not 
 
 ## OpenCore
 
-The protocol, the probe code, and the candidate rows are free forever (CC-BY-4.0). If you want the applied version — silent-failure auditing and output health checks for your own agent pipelines — contact [@chenhz01](https://github.com/chenhz01).
+The spec, the TCK, the probe code, and the candidate rows are free forever (CC-BY-4.0). If you want the applied version — silent-failure auditing and output health checks for your own agent pipelines, with a conformance report — contact [@chenhz01](https://github.com/chenhz01).
 
 ## License
 

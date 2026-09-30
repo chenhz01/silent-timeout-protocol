@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/chenhz01/silent-timeout-protocol/schema/signal.schema.json",
+  "title": "Silent Timeout Protocol — signal object",
+  "description": "Protocol-layer extension carried by probe rows per SPEC v0.1 section 5. CC-BY-4.0.",
+  "type": "object",
+  "required": ["first_signal", "window", "window_status", "masquerade_face", "verdict_rule"],
+  "additionalProperties": true,
+  "properties": {
+    "first_signal": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Concrete, observable earliest event that counts as alive. Must include error events."
+    },
+    "window": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Bounded duration within which the first signal must appear, with calibration basis."
+    },
+    "window_status": {
+      "type": "string",
+      "enum": [
+        "calibration point",
+        "calibration points",
+        "absolute, not a calibration point",
+        "calibration point - to be re-based per deployment"
+      ]
+    },
+    "masquerade_face": {
+      "type": "string",
+      "enum": ["idle", "done", "measured", "pass"],
+      "description": "The milder state the silent failure pretends to be."
+    },
+    "verdict_rule": {
+      "type": "string",
+      "minLength": 10,
+      "pattern": "=>",
+      "description": "Machine-checkable rules using => syntax mapping observations to verdicts."
+    }
+  }
+}
